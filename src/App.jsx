@@ -1,8 +1,11 @@
 import './App.css'
+import {Button} from "./components/ui/button";
 
 function App() {
   return (
-    <div>I am Akanksha</div>
+    <div>
+      <button>Click me</button>
+    </div>
   )
 }
 
