@@ -1,15 +1,23 @@
 import {createBrowserRouter} from "react-router-dom";
 import './App.css'
 import {Button} from "./components/ui/button";
+import AppLayout from "./layouts/app-Layout";
+import LandingPage from "./pages/landing";
 
 const router = createBrowserRouter([
   {
-    element:<AppLayout/>
+    element:<AppLayout/>,
+    children:[
+      {
+        path:"/",
+        element:<LandingPage/>
+      }
+    ]
   },
 ]);
 
 function App() {
-  // return ();
+  return <RouterProvider router={router} />;
 }
 
 export default App
