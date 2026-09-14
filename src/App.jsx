@@ -1,12 +1,15 @@
+import {createBrowserRouter} from "react-router-dom";
 import './App.css'
 import {Button} from "./components/ui/button";
 
+const router = createBrowserRouter([
+  {
+    element:<AppLayout/>
+  },
+]);
+
 function App() {
-  return (
-    <div>
-      <button>Click me</button>
-    </div>
-  )
+  // return ();
 }
 
 export default App
