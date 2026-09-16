@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 const AppLayout = () => {
     return (
         <div>
-            App Layout
+            <div className="grid-background"></div>
             <Outlet />
         </div>
     );
