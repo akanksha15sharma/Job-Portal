@@ -3,7 +3,9 @@ const AppLayout = () => {
     return (
         <div>
             <div className="grid-background"></div>
-            <Outlet />
+            <main className="min-h-sc">
+                <Outlet />
+            </main>
         </div>
     );
 };
