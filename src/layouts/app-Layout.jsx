@@ -9,7 +9,7 @@ const AppLayout = () => {
                 <Outlet />
             </main>
             <div className="p-10 text-center bg-gray-800 mt-10">
-                Thanks for visiting my website! I hope you found what you were looking for.
+                Thanks for visiting my website!
             </div>
         </div>
     );
