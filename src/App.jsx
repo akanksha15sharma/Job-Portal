@@ -3,6 +3,8 @@ import './App.css'
 import AppLayout from "./layouts/app-Layout";
 import { lazy } from 'react';
 import { NotFound, RouteError } from './components/route-feedback';
+const JobAlerts = lazy(() => import('./pages/job-alerts'));
+const Notifications = lazy(() => import('./pages/notifications'));
 const Profile = lazy(() => import('./pages/profile'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const LandingPage = lazy(() => import('./pages/landing'));
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
     errorElement: <RouteError />,
     children:[
       { path: "*", element: <NotFound /> },
+      { path: "/alerts", element: <JobAlerts /> },
+      { path: "/notifications", element: <Notifications /> },
       { path: "/profile", element: <Profile /> },
       { path: "/dashboard", element: <Dashboard /> },
       {

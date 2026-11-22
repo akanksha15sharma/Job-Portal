@@ -3,7 +3,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import ThemeSelect from "@/components/theme-select";
 import { useProfile } from "@/hooks/use-profile";
-import { Menu, Plus, UserRound, X } from "lucide-react";
+import { useJobAlerts } from "@/hooks/use-job-alerts";
+import { Bell, Menu, Plus, UserRound, X } from "lucide-react";
 
 const navigation = [
   { to: "/dashboard", label: "Dashboard" },
@@ -14,6 +15,7 @@ const navigation = [
 
 const Header = () => {
   const { profile } = useProfile();
+  const { unreadCount } = useJobAlerts();
   const initials = profile.fullName.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   const { pathname, search } = useLocation();
   const menuRef = useRef(null);
@@ -104,6 +106,8 @@ const Header = () => {
           <NavLink to="/profile" aria-label={profile.fullName ? `Open profile for ${profile.fullName}` : "Open your profile"} className={({ isActive }) => `hidden size-11 shrink-0 items-center justify-center rounded-full border text-sm font-semibold xl:flex ${isActive ? "border-ring bg-secondary" : "border-border hover:bg-accent"}`}>{initials || <UserRound aria-hidden="true" className="size-5" />}</NavLink>
           <div className="hidden xl:block"><ThemeSelect id="desktop-theme" /></div>
           <div className="hidden xl:block">{postJobLink}</div>
+          <NavLink to="/notifications" onClick={closeMenu} aria-label={`Notifications, ${unreadCount} unread`} className={({ isActive }) => `relative flex size-11 shrink-0 items-center justify-center rounded-lg border ${isActive ? 'border-ring bg-secondary' : 'border-border hover:bg-accent'}`}><Bell aria-hidden="true" className="size-5" />{unreadCount > 0 && <span aria-hidden="true" className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs font-semibold text-primary-foreground">{unreadCount > 99 ? '99+' : unreadCount}</span>}</NavLink>
+          <div className="hidden sm:flex">
           <Show when="signed-out">
             <SignInButton mode="modal">
               <button
@@ -118,6 +122,7 @@ const Header = () => {
           <Show when="signed-in">
             <UserButton />
           </Show>
+          </div>
 
           <details ref={menuRef} className="group xl:hidden">
             <summary
@@ -137,6 +142,21 @@ const Header = () => {
               <NavLink to="/profile" onClick={closeMenu} className={({ isActive }) => `mb-3 flex min-h-16 items-center gap-3 rounded-xl border p-3 ${isActive ? "border-ring bg-secondary" : "border-border"}`}><span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-semibold">{initials || <UserRound className="size-5" />}</span><span className="min-w-0"><span className="block truncate text-sm font-semibold">{profile.fullName || "Your profile"}</span><span className="mt-1 block truncate text-sm text-muted-foreground">{profile.headline || "Add your details and career goals"}</span></span></NavLink>
               <Link to="/" onClick={closeMenu} className={linkClass(pathname === "/")}>Home</Link>
               {renderLinks()}
+              <NavLink to="/alerts" onClick={closeMenu} className={({ isActive }) => linkClass(isActive)}>Job alerts</NavLink>
+              <div className="mt-2 border-t border-border py-3 sm:hidden"><Show when="signed-out">
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="min-h-11 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                Sign in
+              </button>
+            </SignInButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show></div>
               <div className="mt-3 border-t border-border pt-4"><p className="mb-2 text-sm font-medium text-muted-foreground">Appearance</p><ThemeSelect id="mobile-theme" /></div>
               <div className="mt-2 border-t border-border pt-3 [&>a]:flex">
                 {postJobLink}

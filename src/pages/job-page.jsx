@@ -9,7 +9,7 @@ const JobPage = () => {
   const { id } = useParams();
   const { state } = useLocation();
   const previous = typeof state?.from === 'string' ? state.from : '';
-  const returnTo = previous === '/' ? '/' : /^\/(jobs|saved-jobs|my-jobs|dashboard)(\?|$)/.test(previous) ? previous : '/jobs';
+  const returnTo = previous === '/' ? '/' : /^\/(jobs|saved-jobs|my-jobs|dashboard|notifications)(\?|$)/.test(previous) ? previous : '/jobs';
   const { saved, applied, perform, error } = useJobActions();
   const job = jobs.find((item) => item.id === id);
   if (!job) return <section className="mx-auto max-w-4xl px-4 py-12"><h1 className="text-3xl font-semibold">Job not found</h1><p className="my-4 text-muted-foreground">This listing is not available. Explore the other sample opportunities.</p><Link to="/jobs" className="underline underline-offset-4">Browse jobs</Link></section>;

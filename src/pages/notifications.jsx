@@ -1,0 +1,21 @@
+import { useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Bell, CheckCheck } from 'lucide-react';
+import { useJobAlerts } from '@/hooks/use-job-alerts';
+import JobNotification from '@/components/job-notification';
+
+const Notifications = () => {
+  const { alerts, notifications, unreadCount, error, perform } = useJobAlerts();
+  const [params, setParams] = useSearchParams();
+  const unreadOnly = params.get('filter') === 'unread';
+  const items = notifications.filter((item) => !unreadOnly || !item.readAt);
+  const resultRef = useRef(null);
+  const read = (id) => { if (perform('read', { id }) && unreadOnly) resultRef.current?.focus(); };
+  return <section aria-labelledby="notifications-heading" className="mx-auto max-w-4xl px-4 pb-16 sm:px-6"><div className="mb-7 flex flex-wrap items-start justify-between gap-4"><div><p className="mb-3 text-sm font-medium text-muted-foreground">Opportunities worth a closer look</p><h1 id="notifications-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">Notification center</h1><p className="mt-3 leading-7 text-muted-foreground">Matches from your job alerts, collected in one place.</p></div><Link to="/alerts" className="inline-flex min-h-12 items-center rounded-lg border border-border px-4 text-sm font-medium hover:bg-accent">Manage job alerts</Link></div>
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card p-4"><div className="flex gap-2" aria-label="Filter notifications">{[['All', ''], ['Unread', 'unread']].map(([label, filter]) => <button key={label} type="button" aria-pressed={unreadOnly === !!filter} onClick={() => setParams(filter ? { filter } : {})} className="min-h-11 rounded-lg px-4 text-sm font-medium hover:bg-accent aria-pressed:bg-secondary">{label} ({filter ? unreadCount : notifications.length})</button>)}</div><button type="button" disabled={!unreadCount} onClick={() => { if (perform('read-all')) resultRef.current?.focus(); }} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium hover:bg-accent disabled:opacity-50"><CheckCheck aria-hidden="true" className="size-4" />Mark all as read</button></div>
+    <p ref={resultRef} tabIndex={-1} role="status" aria-atomic="true" className="mb-5 rounded text-sm text-muted-foreground">{unreadCount} unread · Showing {items.length} notifications</p>{error && <p role="alert" className="mb-5 text-sm text-destructive">{error}</p>}
+    {items.length ? <div className="space-y-4">{items.map((notification) => <JobNotification key={notification.id} notification={notification} alerts={alerts} onRead={() => read(notification.id)} onUnread={() => perform('unread', { id: notification.id })} />)}</div> : <div className="rounded-2xl border border-dashed border-border bg-card px-5 py-16 text-center"><Bell aria-hidden="true" className="mx-auto mb-5 size-10 text-muted-foreground" /><h2 className="text-2xl font-semibold">{unreadOnly && notifications.length ? 'You’re all caught up.' : alerts.length ? 'Your next match will appear here.' : 'Let’s find roles worth your attention.'}</h2><p className="mx-auto mb-6 mt-3 max-w-md leading-7 text-muted-foreground">{unreadOnly && notifications.length ? 'You have no unread notifications. You can revisit all your matches any time.' : alerts.length ? 'Keep an alert active or broaden its criteria to discover matches in the sample catalog.' : 'Create an alert for a role, skill, or location to start receiving matches.'}</p>{unreadOnly && notifications.length ? <button type="button" onClick={() => setParams({})} className="min-h-12 rounded-lg bg-primary px-5 font-medium text-primary-foreground">View all notifications</button> : <Link to="/alerts" className="inline-flex min-h-12 items-center rounded-lg bg-primary px-5 font-medium text-primary-foreground">{alerts.length ? 'Review alerts' : 'Create a job alert'}</Link>}</div>}
+    <p className="mt-6 text-sm leading-6 text-muted-foreground">Matches are detected from the local sample catalog, not delivered by email. Each job appears once; overlapping alerts and repeat checks do not create duplicate notifications or reset read state.</p>
+  </section>;
+};
+export default Notifications;
