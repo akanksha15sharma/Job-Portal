@@ -71,9 +71,12 @@ const Header = () => {
           to="/"
           aria-label="Job Portal home"
           onClick={closeMenu}
-          className="shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:gap-2.5"
         >
-          <img src="/logo.png" alt="Job Portal" className="h-14 w-auto max-w-32 object-contain sm:h-16" />
+          <img src="/logo.svg" alt="" width="40" height="40" className="size-9 shrink-0 dark:invert sm:size-10" />
+          <span className="whitespace-nowrap text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+            Job<span className="font-normal text-muted-foreground">Portal</span>
+          </span>
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
