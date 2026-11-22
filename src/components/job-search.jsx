@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronDown, MapPin, Search } from 'lucide-react';
 import { locations } from '@/data/jobs';
 
-const JobSearch = ({ query = '', location = '' }) => {
+const JobSearch = ({ query = '', location = '', preserveFilters = false }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   return (
     <form
       role="search"
@@ -11,10 +12,12 @@ const JobSearch = ({ query = '', location = '' }) => {
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const params = new URLSearchParams();
+        const params = new URLSearchParams(preserveFilters ? searchParams : undefined);
         const keyword = data.get('q').trim();
         if (keyword) params.set('q', keyword);
+        else params.delete('q');
         if (data.get('location')) params.set('location', data.get('location'));
+        else params.delete('location');
         navigate(`/jobs${params.size ? `?${params}` : ''}`);
       }}
       className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-3 shadow-xl shadow-black/5 sm:p-4 lg:flex-row lg:items-end"
