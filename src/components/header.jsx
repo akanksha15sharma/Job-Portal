@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 
 const Header = () => {
   return (
@@ -9,12 +10,12 @@ const Header = () => {
         </Link>
 
         {/* <Button variant="outline">Login</Button> */}
-        <SignedOut>
+        <Show when="signed-out">
           <SignInButton />
-        </SignedOut>
-        <SignedIn>
+        </Show>
+        <Show when="signed-in">
           <UserButton />
-        </SignedIn>  
+        </Show>  
     </nav>
   </>
   );
