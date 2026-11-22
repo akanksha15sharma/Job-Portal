@@ -25,8 +25,10 @@ export function useJobActions() {
       window.localStorage.setItem(jobStorageKey, JSON.stringify(updateJobActions(current, action, id)));
       window.dispatchEvent(new Event(changeEvent));
       setError('');
+      return true;
     } catch {
       setError('Your browser could not save this action. Enable local storage and try again.');
+      return false;
     }
   };
   return { ...actions, perform, error };

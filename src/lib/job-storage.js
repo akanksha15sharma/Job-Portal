@@ -12,6 +12,8 @@ export function parseJobActions(raw) {
 }
 
 export function updateJobActions(current, action, id) {
+  if (action === 'clear-saved') return { ...current, saved: [] };
+  if (action === 'remove-saved') return { ...current, saved: current.saved.filter((item) => item !== id) };
   if (action === 'save') return { ...current, saved: current.saved.includes(id) ? current.saved.filter((item) => item !== id) : [...current.saved, id] };
   if (action === 'apply') return { ...current, applied: [...new Set([...current.applied, id])] };
   return current;
