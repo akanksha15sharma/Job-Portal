@@ -4,7 +4,7 @@ import { Check, MapPin, Trash2 } from 'lucide-react';
 const SavedJobCard = ({ job, applied, onApply, onRemove }) => {
   const location = useLocation();
   return (
-    <article aria-labelledby={`saved-${job.id}`} className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-colors hover:border-ring sm:p-6">
+    <article aria-labelledby={`saved-${job.id}`} className="surface-card flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-colors hover:border-ring sm:p-6">
       <div className="mb-5 flex items-center gap-3">
         <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-sm font-bold">{job.initials}</span>
         <div className="min-w-0 flex-1"><p className="font-medium">{job.company}</p><p className="text-sm text-muted-foreground">{job.mode}</p></div>

@@ -1,7 +1,8 @@
-import { jobs } from '../data/jobs.js';
+import { jobs, locations } from '../data/jobs.js';
 export const applicationStatuses = ['Applied', 'Interview', 'Offer', 'Rejected'];
 
 export function getApplications(actions, params = new URLSearchParams()) {
+  const location = locations.includes(params.get('location')) ? params.get('location') : '';
   const query = (params.get('q') || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
   return jobs.filter((job) => actions.applied.includes(job.id)).map((job) => ({
     ...job,
@@ -10,7 +11,7 @@ export function getApplications(actions, params = new URLSearchParams()) {
     const text = [job.title, job.company, ...job.tags].join(' ').toLowerCase();
     return query.every((term) => text.includes(term))
       && (!params.get('status') || !applicationStatuses.includes(params.get('status')) || job.application.status === params.get('status'))
-      && (!params.get('location') || job.location === params.get('location'));
+      && (!location || job.location === location);
   }).sort((a, b) => {
     const sort = params.get('sort');
     if (sort === 'company') return a.company.localeCompare(b.company) || a.id.localeCompare(b.id);

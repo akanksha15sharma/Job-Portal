@@ -1,20 +1,24 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import AppLayout from "./layouts/app-Layout";
-import Dashboard from "./pages/dashboard";
-import LandingPage from "./pages/landing";
-import Onboarding from "./pages/onboarding";
-import JobListing from "./pages/job-listing";
-import JobPage from "./pages/job-page";
-import MyJobs from "./pages/my-job";
-import PostJob from "./pages/post-job";
-import SavedJobs from "./pages/saved-job";
+import { lazy } from 'react';
+import { NotFound, RouteError } from './components/route-feedback';
+const Dashboard = lazy(() => import('./pages/dashboard'));
+const LandingPage = lazy(() => import('./pages/landing'));
+const Onboarding = lazy(() => import('./pages/onboarding'));
+const JobListing = lazy(() => import('./pages/job-listing'));
+const JobPage = lazy(() => import('./pages/job-page'));
+const MyJobs = lazy(() => import('./pages/my-job'));
+const PostJob = lazy(() => import('./pages/post-job'));
+const SavedJobs = lazy(() => import('./pages/saved-job'));
 import { ThemeProvider } from "./components/ui/theme-provider";
 
 const router = createBrowserRouter([
   {
     element:<AppLayout/>,
+    errorElement: <RouteError />,
     children:[
+      { path: "*", element: <NotFound /> },
       { path: "/dashboard", element: <Dashboard /> },
       {
         path:"/",

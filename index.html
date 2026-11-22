@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Discover sample job opportunities, save your shortlist, and manage your applications in one modern career workspace." />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        let theme = 'dark';
+        try {
+          const stored = localStorage.getItem('vite-ui-theme');
+          if (['light', 'dark', 'system'].includes(stored)) theme = stored;
+        } catch { /* Use the default theme when storage is unavailable. */ }
+        const resolved = theme === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+        document.documentElement.classList.add(resolved);
+        document.documentElement.style.colorScheme = resolved;
+      })();
+    </script>
     <title>Job Portal</title>
   </head>
   <body>

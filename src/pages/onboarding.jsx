@@ -1,5 +1,12 @@
-const Onboarding = () => {
-  return <div>Onboarding</div>;
-};
+import { Link } from 'react-router-dom';
+import { Bookmark, BriefcaseBusiness, Building2, LayoutDashboard } from 'lucide-react';
 
+const Onboarding = () => <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 lg:px-8" aria-labelledby="onboarding-heading">
+  <div className="mx-auto mb-10 max-w-2xl text-center"><p className="mb-3 text-sm font-medium uppercase tracking-widest text-muted-foreground">Welcome to Job Portal</p><h1 id="onboarding-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">A clear path to your next chapter.</h1><p className="mt-4 text-lg leading-8 text-muted-foreground">Find work that fits, organize your shortlist, and keep every next step in view.</p></div>
+  <div className="grid gap-6 md:grid-cols-2">{[
+    { icon: BriefcaseBusiness, heading: 'Find your next opportunity', description: 'Explore sample roles, save your favorites, and manage your demo applications in one workspace.', to: '/jobs', action: 'Explore jobs' },
+    { icon: Building2, heading: 'Plan your next hire', description: 'Prepare a job description and save a private draft in this browser. Publishing is not connected in this demo.', to: '/post-job', action: 'Prepare a job draft' },
+  ].map(({ icon: Icon, heading, description, to, action }) => <article key={to} className="surface-card rounded-2xl border border-border bg-card p-6 sm:p-8"><Icon aria-hidden="true" className="mb-5 size-8 text-muted-foreground" /><h2 className="text-2xl font-semibold tracking-tight">{heading}</h2><p className="mb-6 mt-3 leading-7 text-muted-foreground">{description}</p><Link to={to} className="inline-flex min-h-12 items-center rounded-lg bg-primary px-5 font-semibold text-primary-foreground">{action}</Link></article>)}</div>
+  <div className="mt-8 grid gap-5 rounded-2xl border border-border bg-card p-6 sm:grid-cols-2"><div className="flex gap-3"><Bookmark aria-hidden="true" className="mt-1 size-5 shrink-0 text-muted-foreground" /><div><h2 className="font-semibold">Pick up where you left off</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Your saved jobs and applications persist in this browser. No profile setup is needed to explore.</p></div></div><div className="flex gap-3"><LayoutDashboard aria-hidden="true" className="mt-1 size-5 shrink-0 text-muted-foreground" /><div><h2 className="font-semibold">One place for your progress</h2><Link to="/dashboard" className="mt-2 inline-flex min-h-11 items-center rounded text-sm font-medium underline underline-offset-4">Open your dashboard</Link></div></div></div>
+</section>;
 export default Onboarding;

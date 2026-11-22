@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const colors = ['var(--foreground)', 'var(--muted-foreground)', 'var(--ring)', 'var(--border)'];
+const colors = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)'];
 const DashboardCharts = ({ counts, trend, total }) => {
   let offset = 0;
   const segments = Object.entries(counts).map(([status, count], index) => {

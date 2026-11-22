@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Show, SignInButton, UserButton } from "@clerk/react";
+import ThemeSelect from "@/components/theme-select";
 import { Menu, Plus, X } from "lucide-react";
 
 const navigation = [
@@ -11,13 +12,25 @@ const navigation = [
 ];
 
 const Header = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
 
   useEffect(() => {
     menuRef.current?.removeAttribute("open");
-  }, [pathname]);
+  }, [pathname, search]);
+
+  useEffect(() => {
+    const dismiss = (event) => {
+      if (menuRef.current?.open && !menuRef.current.contains(event.target)) menuRef.current.removeAttribute("open");
+    };
+    const media = window.matchMedia("(min-width: 1280px)");
+    const resize = () => { if (media.matches) menuRef.current?.removeAttribute("open"); };
+    document.addEventListener("pointerdown", dismiss);
+    document.addEventListener("focusin", dismiss);
+    media.addEventListener("change", resize);
+    return () => { document.removeEventListener("pointerdown", dismiss); document.removeEventListener("focusin", dismiss); media.removeEventListener("change", resize); };
+  }, []);
 
   const closeMenu = () => menuRef.current?.removeAttribute("open");
   const linkClass = (isActive) =>
@@ -32,6 +45,7 @@ const Header = () => {
       key={to}
       to={to}
       end={end}
+      aria-current={to === "/jobs" && pathname.startsWith("/job/") ? "page" : undefined}
       onClick={closeMenu}
       className={({ isActive }) => linkClass(isActive || (to === "/jobs" && pathname.startsWith("/job/")))}
     >
@@ -58,7 +72,7 @@ const Header = () => {
 
   return (
     <header
-      className="relative z-20 mb-8 border-b border-border bg-background/95"
+      className="relative z-30 mb-8 border-b border-border bg-background/95 backdrop-blur-xl sm:mb-10"
       onKeyDown={(event) => {
         if (event.key === "Escape" && menuRef.current?.open) {
           closeMenu();
@@ -66,7 +80,7 @@ const Header = () => {
         }
       }}
     >
-      <div className="mx-auto flex min-h-24 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-6 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-6 sm:px-6 lg:px-8">
         <Link
           to="/"
           aria-label="Job Portal home"
@@ -79,12 +93,13 @@ const Header = () => {
           </span>
         </Link>
 
-        <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 xl:flex">
           {renderLinks()}
         </nav>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          <div className="hidden lg:block">{postJobLink}</div>
+          <div className="hidden xl:block"><ThemeSelect id="desktop-theme" /></div>
+          <div className="hidden xl:block">{postJobLink}</div>
           <Show when="signed-out">
             <SignInButton mode="modal">
               <button
@@ -100,7 +115,7 @@ const Header = () => {
             <UserButton />
           </Show>
 
-          <details ref={menuRef} className="group lg:hidden">
+          <details ref={menuRef} className="group xl:hidden">
             <summary
               ref={toggleRef}
               aria-label="Toggle navigation menu"
@@ -113,9 +128,11 @@ const Header = () => {
             <nav
               id="mobile-navigation"
               aria-label="Mobile navigation"
-              className="absolute inset-x-0 top-full flex flex-col gap-1 border-b border-border bg-background p-4 shadow-xl sm:px-6"
+              className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-5rem)] flex-col gap-1 overflow-y-auto overscroll-contain border-b border-border bg-background p-4 shadow-xl sm:px-6"
             >
+              <Link to="/" onClick={closeMenu} className={linkClass(pathname === "/")}>Home</Link>
               {renderLinks()}
+              <div className="mt-3 border-t border-border pt-4"><p className="mb-2 text-sm font-medium text-muted-foreground">Appearance</p><ThemeSelect id="mobile-theme" /></div>
               <div className="mt-2 border-t border-border pt-3 [&>a]:flex">
                 {postJobLink}
               </div>

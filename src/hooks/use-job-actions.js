@@ -1,4 +1,5 @@
 import { useState, useSyncExternalStore } from 'react';
+import { getActionMessage, notify } from '../lib/notifications';
 import { jobStorageKey, parseJobActions, updateJobActions } from '../lib/job-storage';
 
 const changeEvent = 'job-portal-actions-changed';
@@ -25,9 +26,12 @@ export function useJobActions() {
       window.localStorage.setItem(jobStorageKey, JSON.stringify(updateJobActions(current, action, id, details)));
       window.dispatchEvent(new Event(changeEvent));
       setError('');
+      notify(getActionMessage(action, current, id, details));
       return true;
     } catch {
-      setError('Your browser could not save this action. Enable local storage and try again.');
+      const message = 'Your browser could not save this action. Enable local storage and try again.';
+      setError(message);
+      notify(message, 'error');
       return false;
     }
   };
