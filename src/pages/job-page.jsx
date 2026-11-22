@@ -9,7 +9,7 @@ const JobPage = () => {
   const { id } = useParams();
   const { state } = useLocation();
   const previous = typeof state?.from === 'string' ? state.from : '';
-  const returnTo = /^\/(jobs|saved-jobs|my-jobs|dashboard)(\?|$)/.test(previous) ? previous : '/jobs';
+  const returnTo = previous === '/' ? '/' : /^\/(jobs|saved-jobs|my-jobs|dashboard)(\?|$)/.test(previous) ? previous : '/jobs';
   const { saved, applied, perform, error } = useJobActions();
   const job = jobs.find((item) => item.id === id);
   if (!job) return <section className="mx-auto max-w-4xl px-4 py-12"><h1 className="text-3xl font-semibold">Job not found</h1><p className="my-4 text-muted-foreground">This listing is not available. Explore the other sample opportunities.</p><Link to="/jobs" className="underline underline-offset-4">Browse jobs</Link></section>;
@@ -23,7 +23,7 @@ const JobPage = () => {
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8" aria-labelledby="job-heading">
-      <Link to={returnTo} className="mb-6 inline-block rounded text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">Back to results</Link>
+      <Link to={returnTo} className="mb-6 inline-block rounded text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">{returnTo === '/' || returnTo === '/dashboard' ? 'Back to recommendations' : 'Back to results'}</Link>
       <div className="mb-8 rounded-2xl border border-border bg-card p-6 sm:p-9">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
           <span aria-hidden="true" className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-secondary text-xl font-bold">{job.initials}</span>

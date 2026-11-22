@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
+import RecommendationMatch from '@/components/recommendation-match';
 import { BriefcaseBusiness, MapPin } from 'lucide-react';
 
 import SaveJobButton from '@/components/save-job-button';
 
-const JobCard = ({ job }) => {
+const JobCard = ({ job, match, onApply }) => {
   const location = useLocation();
   const navigationState = { from: `${location.pathname}${location.search}` };
   return (
@@ -19,11 +20,12 @@ const JobCard = ({ job }) => {
       <span className="inline-flex items-center gap-1.5"><BriefcaseBusiness aria-hidden="true" className="size-4" />{job.type}</span>
     </div>
     <p className="my-4 text-sm leading-6 text-muted-foreground">{job.description}</p>
-    <ul aria-label="Skills" className="mb-6 flex flex-wrap gap-2">{job.tags.map((tag) => <li key={tag} className="rounded-md bg-secondary px-2.5 py-1 text-sm text-secondary-foreground">{tag}</li>)}</ul>
+    {match ? <RecommendationMatch match={match} /> : <ul aria-label="Skills" className="mb-6 flex flex-wrap gap-2">{job.tags.map((tag) => <li key={tag} className="rounded-md bg-secondary px-2.5 py-1 text-sm text-secondary-foreground">{tag}</li>)}</ul>}
     <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
       <p className="font-semibold">{job.salary}<span className="block text-sm font-normal text-muted-foreground">{job.experience} experience</span></p>
       <Link to={`/job/${job.id}`} state={navigationState} aria-label={`View ${job.title} at ${job.company}`} className="inline-flex min-h-11 items-center rounded-lg border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View job</Link>
     </div>
+    {onApply && <div className="mt-4"><button type="button" onClick={onApply} aria-label={`Apply now to ${job.title} at ${job.company}`} className="min-h-12 w-full rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/80">Apply Now</button></div>}
   </article>
   );
 };

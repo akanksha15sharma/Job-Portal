@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BriefcaseBusiness, Globe2, SlidersHorizontal } from 'lucide-react';
 import JobSearch from '@/components/job-search';
+import RecommendedJobs from '@/components/recommended-jobs';
 import JobCard from '@/components/job-card';
 import { jobs } from '@/data/jobs';
 
@@ -25,6 +26,8 @@ const LandingPage = () => (
         { icon: SlidersHorizontal, title: 'Focus on what fits', text: 'Search by your skills and narrow down by location.' },
       ].map(({ icon: Icon, title, text }) => <div key={title} className="flex gap-3"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary"><Icon aria-hidden="true" className="size-5" /></span><div><h2 className="font-semibold">{title}</h2><p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p></div></div>)}
     </section>
+
+    <div className="pt-10 sm:pt-14"><RecommendedJobs id="home-recommendations" /></div>
 
     <section aria-labelledby="featured-heading" className="py-10 sm:py-14">
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
