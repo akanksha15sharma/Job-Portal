@@ -4,7 +4,7 @@ import { Show, SignInButton, UserButton } from "@clerk/react";
 import { Menu, Plus, X } from "lucide-react";
 
 const navigation = [
-  { to: "/", label: "Home", end: true },
+  { to: "/dashboard", label: "Dashboard" },
   { to: "/jobs", label: "Find jobs" },
   { to: "/saved-jobs", label: "Saved jobs" },
   { to: "/my-jobs", label: "Applications" },

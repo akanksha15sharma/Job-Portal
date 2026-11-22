@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import AppLayout from "./layouts/app-Layout";
+import Dashboard from "./pages/dashboard";
 import LandingPage from "./pages/landing";
 import Onboarding from "./pages/onboarding";
 import JobListing from "./pages/job-listing";
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   {
     element:<AppLayout/>,
     children:[
+      { path: "/dashboard", element: <Dashboard /> },
       {
         path:"/",
         element:<LandingPage/>
