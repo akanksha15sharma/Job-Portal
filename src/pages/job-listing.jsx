@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 import JobSearch from '@/components/job-search';
 import JobCard from '@/components/job-card';
 import { experienceLevels, getJobResults, jobTypes, readJobFilters, salaryRanges, sortOptions } from '@/lib/job-filters';
@@ -23,6 +23,12 @@ const JobListing = () => {
     { key: 'experience', label: 'Experience level', placeholder: 'All experience levels', options: experienceLevels },
     { key: 'salary', label: 'Salary range', placeholder: 'Any salary', options: salaryRanges },
     { key: 'sort', label: 'Sort jobs', options: sortOptions },
+  ];
+  const activeFilters = [
+    ...(query ? [{ key: 'q', label: `Search: ${query}` }] : []),
+    ...(location ? [{ key: 'location', label: location }] : []),
+    ...controls.filter(({ key }) => key !== 'sort' && filters[key]).map(({ key, options }) => ({ key, label: options.find(({ value }) => value === filters[key])?.label })),
+    ...(filters.remote ? [{ key: 'remote', label: 'Remote only' }] : []),
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8" aria-labelledby="jobs-heading">
@@ -54,6 +60,9 @@ const JobListing = () => {
         </label>
         <p id="salary-help" className="mt-4 text-sm leading-6 text-muted-foreground">Salaries are in lakhs per year (LPA). Matches include overlapping salary ranges; salary sorting uses the highest advertised pay. Filters apply immediately; use Browse Jobs to submit keyword changes.</p>
       </section>
+      {activeFilters.length > 0 && <div aria-label="Active filters" className="mt-5 flex flex-wrap gap-2">
+        {activeFilters.map(({ key, label }) => <button key={key} type="button" onClick={() => updateFilter(key, '')} aria-label={`Remove filter: ${label}`} className="inline-flex min-h-10 max-w-full items-center gap-2 rounded-full border border-border bg-secondary px-3 py-2 text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span className="truncate">{label}</span><X aria-hidden="true" className="size-3.5 shrink-0" /></button>)}
+      </div>}
       <div className="my-7 flex flex-wrap items-center justify-between gap-3">
         <p role="status" className="text-muted-foreground">{results.length} sample {results.length === 1 ? 'job' : 'jobs'}{query && ` matching “${query}”`}{location && ` in ${location}`}</p>
       </div>
