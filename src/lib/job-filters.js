@@ -22,6 +22,7 @@ export function readJobFilters(params) {
   return {
     query: params.get('q') || '',
     location: locations.includes(params.get('location')) ? params.get('location') : '',
+    remote: params.get('remote') === 'true',
     type: jobTypes.includes(params.get('type')) ? params.get('type') : '',
     experience: experienceLevels.some(({ value }) => value === params.get('experience')) ? params.get('experience') : '',
     salary: salaryRanges.some(({ value }) => value === params.get('salary')) ? params.get('salary') : '',
@@ -32,7 +33,8 @@ export function readJobFilters(params) {
 export function getJobResults(filters) {
   const range = salaryRanges.find(({ value }) => value === filters.salary);
   return filterJobs(filters.query, filters.location)
-    .filter((job) => (!filters.type || job.type === filters.type)
+    .filter((job) => (!filters.remote || job.mode === 'Remote')
+      && (!filters.type || job.type === filters.type)
       && (!filters.experience || job.experienceLevel === filters.experience)
       && (!range || (job.salaryMax >= range.min && job.salaryMin < range.max)))
     .sort((a, b) => {

@@ -9,7 +9,7 @@ const JobListing = () => {
   const filters = readJobFilters(params);
   const { query, location } = filters;
   const results = getJobResults(filters);
-  const hasFilters = ['q', 'location', 'type', 'experience', 'salary', 'sort'].some((key) => params.has(key));
+  const hasFilters = ['q', 'location', 'type', 'experience', 'salary', 'sort', 'remote'].some((key) => params.has(key));
   const updateFilter = (key, value) => {
     setParams((previous) => {
       const next = new URLSearchParams(previous);
@@ -48,7 +48,11 @@ const JobListing = () => {
             </div>
           ))}
         </div>
-        <p id="salary-help" className="mt-4 text-sm leading-6 text-muted-foreground">Salaries are in lakhs per year (LPA). Matches include overlapping salary ranges; salary sorting uses the highest advertised pay. Filters apply immediately; use Browse Jobs to submit keyword and location changes.</p>
+        <label className="mt-5 inline-flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium">
+          <input type="checkbox" checked={filters.remote} onChange={(event) => updateFilter('remote', event.target.checked ? 'true' : '')} className="size-4 accent-foreground focus-visible:outline-2 focus-visible:outline-ring" />
+          Remote jobs only
+        </label>
+        <p id="salary-help" className="mt-4 text-sm leading-6 text-muted-foreground">Salaries are in lakhs per year (LPA). Matches include overlapping salary ranges; salary sorting uses the highest advertised pay. Filters apply immediately; use Browse Jobs to submit keyword changes.</p>
       </section>
       <div className="my-7 flex flex-wrap items-center justify-between gap-3">
         <p role="status" className="text-muted-foreground">{results.length} sample {results.length === 1 ? 'job' : 'jobs'}{query && ` matching “${query}”`}{location && ` in ${location}`}</p>

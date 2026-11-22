@@ -55,7 +55,7 @@ test('URL state can be serialized and independently restored without stale selec
 
 test('unknown URL filter values fall back to valid defaults', () => {
   const filters = readJobFilters(new URLSearchParams('type=invalid&experience=invalid&salary=invalid&sort=invalid&location=invalid'));
-  assert.deepEqual(filters, { query: '', location: '', type: '', experience: '', salary: '', sort: 'newest' });
+  assert.deepEqual(filters, { remote: false, query: '', location: '', type: '', experience: '', salary: '', sort: 'newest' });
   assert.equal(getJobResults(filters).length, jobs.length);
 });
 
@@ -64,4 +64,11 @@ test('filtering and sorting do not mutate shared sample data', () => {
   results('sort=salary-desc');
   results('experience=senior&salary=20-plus');
   assert.equal(JSON.stringify(jobs), original);
+});
+
+test('remote filter combines with other criteria and restores from URL', () => {
+  assert.deepEqual(results('remote=true').map(job => job.id), ['product-designer']);
+  assert.equal(results('remote=true&location=Pune').length, 0);
+  assert.equal(results('remote=true&type=Full-time&experience=mid&salary=15-20&q=design').length, 1);
+  assert.equal(readJobFilters(new URLSearchParams('remote=invalid')).remote, false);
 });

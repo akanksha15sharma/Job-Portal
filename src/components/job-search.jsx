@@ -33,7 +33,7 @@ const JobSearch = ({ query = '', location = '', preserveFilters = false }) => {
         <label htmlFor="job-location" className="mb-2 block px-1 text-sm font-medium">Where do you want to work?</label>
         <div className="relative">
           <MapPin aria-hidden="true" className="pointer-events-none absolute left-3 top-3.5 size-5 text-muted-foreground" />
-          <select id="job-location" name="location" defaultValue={location} className="h-12 w-full appearance-none rounded-lg border border-input bg-background pl-10 pr-9 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <select id="job-location" name="location" defaultValue={location} onChange={(event) => { if (preserveFilters) event.currentTarget.form.requestSubmit(); }} className="h-12 w-full appearance-none rounded-lg border border-input bg-background pl-10 pr-9 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <option value="">All locations</option>
             {locations.map((place) => <option key={place} value={place}>{place}</option>)}
           </select>
