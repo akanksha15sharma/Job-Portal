@@ -55,6 +55,6 @@ test('apply from saved collection persists once without removing the bookmark', 
   const current = { saved: ['frontend-engineer'], applied: [] };
   const next = updateJobActions(current, 'apply', 'frontend-engineer');
   const restored = parseJobActions(JSON.stringify(next));
-  assert.deepEqual(restored, { saved: ['frontend-engineer'], applied: ['frontend-engineer'] });
+  assert.deepEqual({ saved: restored.saved, applied: restored.applied }, { saved: ['frontend-engineer'], applied: ['frontend-engineer'] });
   assert.deepEqual(updateJobActions(restored, 'apply', 'frontend-engineer'), restored);
 });

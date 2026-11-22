@@ -21,7 +21,7 @@ test('applications persist through serialization and cannot be duplicated', () =
   const initial = { saved: ['saved'], applied: [] };
   const applied = updateJobActions(initial, 'apply', 'job');
   const restored = parseJobActions(JSON.stringify(applied));
-  assert.deepEqual(restored, { saved: ['saved'], applied: ['job'] });
+  assert.deepEqual({ saved: restored.saved, applied: restored.applied }, { saved: ['saved'], applied: ['job'] });
   assert.deepEqual(updateJobActions(restored, 'apply', 'job'), restored);
-  assert.deepEqual(updateJobActions(restored, 'save', 'saved'), { saved: [], applied: ['job'] });
+  assert.deepEqual(updateJobActions(restored, 'save', 'saved'), { ...restored, saved: [] });
 });

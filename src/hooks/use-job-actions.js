@@ -19,10 +19,10 @@ export function useJobActions() {
   const raw = useSyncExternalStore(subscribe, getSnapshot, () => null);
   const [error, setError] = useState('');
   const actions = parseJobActions(raw);
-  const perform = (action, id) => {
+  const perform = (action, id, details) => {
     try {
       const current = parseJobActions(window.localStorage.getItem(jobStorageKey));
-      window.localStorage.setItem(jobStorageKey, JSON.stringify(updateJobActions(current, action, id)));
+      window.localStorage.setItem(jobStorageKey, JSON.stringify(updateJobActions(current, action, id, details)));
       window.dispatchEvent(new Event(changeEvent));
       setError('');
       return true;

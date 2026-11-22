@@ -7,7 +7,7 @@ const navigation = [
   { to: "/", label: "Home", end: true },
   { to: "/jobs", label: "Find jobs" },
   { to: "/saved-jobs", label: "Saved jobs" },
-  { to: "/my-jobs", label: "My jobs" },
+  { to: "/my-jobs", label: "Applications" },
 ];
 
 const Header = () => {
