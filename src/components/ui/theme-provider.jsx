@@ -50,6 +50,8 @@ export function ThemeProvider({
   )
 }
 
+// Keep the shared helper export alongside its components without changing the public API.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext)
 

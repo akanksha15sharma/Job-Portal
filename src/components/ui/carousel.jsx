@@ -33,14 +33,20 @@ function Carousel({
     },
     plugins
   )
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false)
-  const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const subscribe = React.useCallback((onChange) => {
+    if (!api) return () => {}
+    api.on("reInit", onChange)
+    api.on("select", onChange)
+    return () => {
+      api.off("reInit", onChange)
+      api.off("select", onChange)
+    }
+  }, [api])
 
-  const onSelect = React.useCallback((api) => {
-    if (!api) return
-    setCanScrollPrev(api.canScrollPrev())
-    setCanScrollNext(api.canScrollNext())
-  }, [])
+  const getCanScrollPrev = React.useCallback(() => api?.canScrollPrev() ?? false, [api])
+  const getCanScrollNext = React.useCallback(() => api?.canScrollNext() ?? false, [api])
+  const canScrollPrev = React.useSyncExternalStore(subscribe, getCanScrollPrev)
+  const canScrollNext = React.useSyncExternalStore(subscribe, getCanScrollNext)
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev()
@@ -67,17 +73,6 @@ function Carousel({
     if (!api || !setApi) return
     setApi(api)
   }, [api, setApi])
-
-  React.useEffect(() => {
-    if (!api) return
-    onSelect(api)
-    api.on("reInit", onSelect)
-    api.on("select", onSelect)
-
-    return () => {
-      api?.off("select", onSelect)
-    }
-  }, [api, onSelect])
 
   return (
     <CarouselContext.Provider
@@ -212,4 +207,6 @@ function CarouselNext({
   )
 }
 
+// Keep the shared helper export alongside its components without changing the public API.
+// eslint-disable-next-line react-refresh/only-export-components
 export { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, useCarousel };
