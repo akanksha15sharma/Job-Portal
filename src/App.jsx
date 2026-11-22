@@ -3,6 +3,7 @@ import './App.css'
 import AppLayout from "./layouts/app-Layout";
 import { lazy } from 'react';
 import { NotFound, RouteError } from './components/route-feedback';
+const Profile = lazy(() => import('./pages/profile'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const LandingPage = lazy(() => import('./pages/landing'));
 const Onboarding = lazy(() => import('./pages/onboarding'));
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
     errorElement: <RouteError />,
     children:[
       { path: "*", element: <NotFound /> },
+      { path: "/profile", element: <Profile /> },
       { path: "/dashboard", element: <Dashboard /> },
       {
         path:"/",

@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import ThemeSelect from "@/components/theme-select";
-import { Menu, Plus, X } from "lucide-react";
+import { useProfile } from "@/hooks/use-profile";
+import { Menu, Plus, UserRound, X } from "lucide-react";
 
 const navigation = [
   { to: "/dashboard", label: "Dashboard" },
@@ -12,6 +13,8 @@ const navigation = [
 ];
 
 const Header = () => {
+  const { profile } = useProfile();
+  const initials = profile.fullName.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   const { pathname, search } = useLocation();
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
@@ -98,6 +101,7 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-3 sm:gap-4">
+          <NavLink to="/profile" aria-label={profile.fullName ? `Open profile for ${profile.fullName}` : "Open your profile"} className={({ isActive }) => `hidden size-11 shrink-0 items-center justify-center rounded-full border text-sm font-semibold xl:flex ${isActive ? "border-ring bg-secondary" : "border-border hover:bg-accent"}`}>{initials || <UserRound aria-hidden="true" className="size-5" />}</NavLink>
           <div className="hidden xl:block"><ThemeSelect id="desktop-theme" /></div>
           <div className="hidden xl:block">{postJobLink}</div>
           <Show when="signed-out">
@@ -130,6 +134,7 @@ const Header = () => {
               aria-label="Mobile navigation"
               className="absolute inset-x-0 top-full flex max-h-[calc(100dvh-5rem)] flex-col gap-1 overflow-y-auto overscroll-contain border-b border-border bg-background p-4 shadow-xl sm:px-6"
             >
+              <NavLink to="/profile" onClick={closeMenu} className={({ isActive }) => `mb-3 flex min-h-16 items-center gap-3 rounded-xl border p-3 ${isActive ? "border-ring bg-secondary" : "border-border"}`}><span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-semibold">{initials || <UserRound className="size-5" />}</span><span className="min-w-0"><span className="block truncate text-sm font-semibold">{profile.fullName || "Your profile"}</span><span className="mt-1 block truncate text-sm text-muted-foreground">{profile.headline || "Add your details and career goals"}</span></span></NavLink>
               <Link to="/" onClick={closeMenu} className={linkClass(pathname === "/")}>Home</Link>
               {renderLinks()}
               <div className="mt-3 border-t border-border pt-4"><p className="mb-2 text-sm font-medium text-muted-foreground">Appearance</p><ThemeSelect id="mobile-theme" /></div>
